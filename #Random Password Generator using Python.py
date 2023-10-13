@@ -1,27 +1,21 @@
-#Random Password Generator using Python
-
-#import the necessary modules
 import random
 import string
 
-#imput the length of the password
-lenght = int(input("Enter the length of the password: "))
+# Input the length of the password
+length = int(input("Enter the length of the password: "))
 
-#Define the data
-lower = string.ascii_lowercase
-upper = string.ascii_uppercase
-num = string.digits
-string = string.punctuation
+# Define character sets
+lowercase = string.ascii_lowercase
+uppercase = string.ascii_uppercase
+digits = string.digits
+special_characters = string.punctuation
 
-#combine the data
-all = lower + upper + num + string
+# Combine the character sets
+all_characters = lowercase + uppercase + digits + special_characters
 
-#use random
-temp    = random.sample(all, lenght)
+# Generate a random password
+password_list = random.sample(all_characters, length)
+password = "".join(password_list)
 
-#Create the password
-password = "".join(temp)
-
-#print the password
-print("Password: ", password)
-
+# Print the password
+print("Generated Password:", password)
