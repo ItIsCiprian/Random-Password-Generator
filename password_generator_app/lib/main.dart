@@ -38,7 +38,7 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
     if (_useLowercase) charSets.add('abcdefghijklmnopqrstuvwxyz');
     if (_useUppercase) charSets.add('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
     if (_useDigits) charSets.add('0123456789');
-    if (_useSpecial) charSets.add('!@#$%^&*()_+-=[]{}|;:,.<>?');
+    if (_useSpecial) charSets.add('!@#\$%^&*()_+-=[]{}|;:,.<>?');
 
     if (charSets.isEmpty) {
       setState(() {
