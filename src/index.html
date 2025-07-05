@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Password Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            color: white;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .password-display {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            word-wrap: break-word;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .options label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .slider-container {
+            margin-bottom: 20px;
+        }
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+        button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #ff4757;
+        }
+        .copy-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Password Generator</h1>
+        <div class="password-display">
+            <span id="password"></span>
+            <button class="copy-btn" onclick="copyPassword()">&#x1f4cb;</button>
+        </div>
+        <div class="options">
+            <div class="slider-container">
+                <label for="length">Password Length: <span id="length-val">12</span></label>
+                <input type="range" id="length" min="4" max="32" value="12" oninput="updateLength()">
+            </div>
+            <label><input type="checkbox" id="lowercase" checked> Include Lowercase</label>
+            <label><input type="checkbox" id="uppercase" checked> Include Uppercase</label>
+            <label><input type="checkbox" id="digits" checked> Include Digits</label>
+            <label><input type="checkbox" id="special" checked> Include Special Characters</label>
+        </div>
+        <button onclick="generatePassword()">Generate Password</button>
+    </div>
+
+    <script>
+        function updateLength() {
+            document.getElementById('length-val').innerText = document.getElementById('length').value;
+        }
+
+        function generatePassword() {
+            const length = document.getElementById('length').value;
+            const includeLowercase = document.getElementById('lowercase').checked;
+            const includeUppercase = document.getElementById('uppercase').checked;
+            const includeDigits = document.getElementById('digits').checked;
+            const includeSpecial = document.getElementById('special').checked;
+
+            const charSets = {
+                lowercase: 'abcdefghijklmnopqrstuvwxyz',
+                uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                digits: '0123456789',
+                special: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+            };
+
+            let availableChars = '';
+            let password = [];
+
+            if (includeLowercase) {
+                availableChars += charSets.lowercase;
+                password.push(charSets.lowercase[Math.floor(Math.random() * charSets.lowercase.length)]);
+            }
+            if (includeUppercase) {
+                availableChars += charSets.uppercase;
+                password.push(charSets.uppercase[Math.floor(Math.random() * charSets.uppercase.length)]);
+            }
+            if (includeDigits) {
+                availableChars += charSets.digits;
+                password.push(charSets.digits[Math.floor(Math.random() * charSets.digits.length)]);
+            }
+            if (includeSpecial) {
+                availableChars += charSets.special;
+                password.push(charSets.special[Math.floor(Math.random() * charSets.special.length)]);
+            }
+
+            if (availableChars === '') {
+                alert('Please select at least one character type.');
+                return;
+            }
+
+            for (let i = password.length; i < length; i++) {
+                password.push(availableChars[Math.floor(Math.random() * availableChars.length)]);
+            }
+
+            document.getElementById('password').innerText = password.sort(() => Math.random() - 0.5).join('');
+        }
+
+        function copyPassword() {
+            const password = document.getElementById('password').innerText;
+            if(password){
+                navigator.clipboard.writeText(password).then(() => {
+                    alert('Password copied to clipboard!');
+                });
+            }
+        }
+
+        // Initial password generation
+        generatePassword();
+    </script>
+</body>
+</html>
