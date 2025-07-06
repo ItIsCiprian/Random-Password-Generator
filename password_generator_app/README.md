@@ -1,6 +1,6 @@
-# password_generator_app
+# Cipher Generator
 
-A new Flutter project.
+A simple and modern password generator.
 
 ## Getting Started
 
