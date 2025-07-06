@@ -33,6 +33,15 @@ A sleek and powerful password generator built with Python for the command line a
 
 2. **Use the interactive controls** to generate and customize your password.
 
+## Installation
+
+### Android
+
+1.  Go to the [Releases](https://github.com/ItIsCiprian/Random-Password-Generator/releases) page of this repository.
+2.  Download the latest `.apk` file from the "Assets" section of a release.
+3.  On your Android device, you may need to enable "Install from unknown sources" in your security settings.
+4.  Locate the downloaded `.apk` file on your device and tap on it to install.
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
