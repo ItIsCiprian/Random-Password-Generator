@@ -280,6 +280,56 @@ class AboutPage extends StatelessWidget {
               ),
             ),
             Card(
+              margin: const EdgeInsets.only(bottom: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Features',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '''
+- Customizable Password Generation: Generate passwords of any length with your choice of character types (lowercase, uppercase, digits, special characters).
+- Interactive CLI: A user-friendly command-line interface that guides you through the password generation process.
+- Modern Web UI: A beautiful and responsive web interface with interactive controls and a sleek design.
+- Secure: Generates strong, random passwords to protect your accounts.
+''',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              margin: const EdgeInsets.only(bottom: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Project Overview',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '''
+This project contains two implementations of a random password generator:
+
+1.  A Flutter application: A cross-platform app that allows you to generate random passwords with customizable options.
+2.  A simple web version: A basic HTML and Python-based password generator.
+''',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(

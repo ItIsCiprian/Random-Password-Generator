@@ -7,17 +7,40 @@
     <title>Modern Password Generator</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --background-light: linear-gradient(135deg, #667eea, #764ba2);
+            --background-dark: linear-gradient(135deg, #2c3e50, #34495e);
+            --container-bg-light: rgba(255, 255, 255, 0.1);
+            --container-bg-dark: rgba(0, 0, 0, 0.2);
+            --text-color-light: white;
+            --text-color-dark: #ecf0f1;
+            --password-display-bg-light: rgba(0, 0, 0, 0.2);
+            --password-display-bg-dark: rgba(255, 255, 255, 0.1);
+            --option-bg-light: rgba(0, 0, 0, 0.1);
+            --option-bg-dark: rgba(255, 255, 255, 0.05);
+            --button-bg-light: #ff6b6b;
+            --button-hover-light: #ff4757;
+            --button-bg-dark: #3498db;
+            --button-hover-dark: #2980b9;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: var(--background-light);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            transition: background 0.3s ease;
         }
+
+        body.dark-mode {
+            background: var(--background-dark);
+        }
+
         .container {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--container-bg-light);
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
@@ -26,15 +49,24 @@
             width: 100%;
             max-width: 450px;
             text-align: center;
-            color: white;
+            color: var(--text-color-light);
+            transition: background 0.3s ease, color 0.3s ease;
+            position: relative; /* For positioning buttons */
         }
+
+        body.dark-mode .container {
+            background: var(--container-bg-dark);
+            color: var(--text-color-dark);
+        }
+
         h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
             font-weight: 600;
         }
+
         .password-display {
-            background: rgba(0, 0, 0, 0.2);
+            background: var(--password-display-bg-light);
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -44,56 +76,198 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            transition: background 0.3s ease;
         }
+
+        body.dark-mode .password-display {
+            background: var(--password-display-bg-dark);
+        }
+
         .options label {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
-            background: rgba(0, 0, 0, 0.1);
+            background: var(--option-bg-light);
             padding: 10px;
             border-radius: 8px;
+            transition: background 0.3s ease;
         }
+
+        body.dark-mode .options label {
+            background: var(--option-bg-dark);
+        }
+
         .slider-container {
             margin-bottom: 20px;
         }
+
         .slider-container label {
             display: block;
             margin-bottom: 10px;
         }
+
         input[type="range"] {
             width: 100%;
             cursor: pointer;
         }
+
         button {
-            background: #ff6b6b;
+            background: var(--button-bg-light);
             color: white;
             border: none;
             padding: 15px 30px;
             border-radius: 10px;
             font-size: 1.2rem;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.1s ease;
             width: 100%;
             margin-top: 20px;
         }
+
         button:hover {
-            background: #ff4757;
+            background: var(--button-hover-light);
+            transform: translateY(-2px);
         }
+
+        body.dark-mode button {
+            background: var(--button-bg-dark);
+        }
+
+        body.dark-mode button:hover {
+            background: var(--button-hover-dark);
+        }
+
         .copy-btn {
             background: none;
             border: none;
-            color: white;
+            color: var(--text-color-light);
             cursor: pointer;
             font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .copy-btn {
+            color: var(--text-color-dark);
+        }
+
+        .top-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .top-buttons button {
+            width: auto;
+            padding: 10px;
+            margin: 0;
+            border-radius: 50%;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .top-buttons button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        body.dark-mode .top-buttons button {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .top-buttons button:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--container-bg-light);
+            margin: auto;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            position: relative;
+            color: var(--text-color-light);
+        }
+
+        body.dark-mode .modal-content {
+            background-color: var(--container-bg-dark);
+            color: var(--text-color-dark);
+        }
+
+        .close-button {
+            color: var(--text-color-light);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        body.dark-mode .close-button {
+            color: var(--text-color-dark);
+        }
+
+        .modal-content h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .modal-content p, .modal-content ul {
+            font-size: 1rem;
+            line-height: 1.6;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .modal-content ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .modal-content pre {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="top-buttons">
+            <button id="theme-toggle-btn">&#9728;</button> <!-- Sun icon for light mode -->
+            <button id="info-btn">&#x2139;</button> <!-- Info icon -->
+        </div>
         <h1>Password Generator</h1>
         <div class="password-display">
-            <span id="password"></span>
+            <span id="password" style="flex-grow: 1; text-align: left;"></span>
             <button class="copy-btn" onclick="copyPassword()">&#x1f4cb;</button>
         </div>
         <div class="options">
@@ -107,6 +281,151 @@
             <label><input type="checkbox" id="special" checked> Include Special Characters</label>
         </div>
         <button onclick="generatePassword()">Generate Password</button>
+    </div>
+
+    <!-- The Modal -->
+    <div id="infoModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>About Cipher Generator</h2>
+            <h3>Modern Password Generator</h3>
+            <p>Built by Ionut Ciprian Anescu</p>
+            <p>GitHub Profile: <a href="https://github.com/ItIsCiprian" target="_blank">https://github.com/ItIsCiprian</a></p>
+
+            <h3>Features</h3>
+            <p>- Customizable Password Generation: Generate passwords of any length with your choice of character types (lowercase, uppercase, digits, special characters).</p>
+            <p>- Interactive CLI: A user-friendly command-line interface that guides you through the password generation process.</p>
+            <p>- Modern Web UI: A beautiful and responsive web interface with interactive controls and a sleek design.</p>
+            <p>- Secure: Generates strong, random passwords to protect your accounts.</p>
+
+            <h3>Project Overview</h3>
+            <p>This project contains two implementations of a random password generator:</p>
+            <ul>
+                <li>A Flutter application: A cross-platform app that allows you to generate random passwords with customizable options.</li>
+                <li>A simple web version: A basic HTML and Python-based password generator.</li>
+            </ul>
+            <h3>License: GPL v3</h3>
+            <p>GNU General Public License v3.0</p>
+            <p>Copyright (C) 2007 Free Software Foundation, Inc. &lt;https://fsf.org/&gt;</p>
+            <p>Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.</p>
+            <p>Preamble</p>
+            <p>The GNU General Public License is a free, copyleft license for software and other kinds of works.</p>
+            <p>The licenses for most software and other practical works are designed to take away your freedom to share and change the works. By contrast, the GNU General Public License is intended to guarantee your freedom to share and change all versions of a program--to make sure it remains free software for all its users. We, the Free Software Foundation, are using this License for most of our software; it applies also to any other work released this way by its authors. You can apply it to your programs, too.</p>
+            <p>When we speak of free software, we are referring to freedom, not price. Our General Public Licenses are designed to make sure that you have the freedom to distribute copies of free software (and charge for them if you wish), that you receive source code or can get it if you want it, that you can change software or use pieces of it in new free programs, and that you know you can do these things.</p>
+            <p>To protect your rights, we need to prevent others from denying you these rights or asking you to surrender the rights. Therefore, you have certain responsibilities if you distribute copies of the software, or if you modify it: responsibilities to respect the freedom of others.</p>
+            <p>For example, if you distribute copies of such a program, whether gratis or for a fee, you must pass on to the recipients the same freedoms that you received. You must make sure that they, too, receive or can get the source code. And you must show them these terms so they know their rights.</p>
+            <p>Developers that use the GNU GPL protect your rights with two steps: (1) assert copyright on the software, and (2) offer you this License giving you legal permission to copy, distribute and/or modify it.</p>
+            <p>For the developers' and authors' protection, the GPL clearly explains that there is no warranty for this free software. For both users' and authors' sake, the GPL requires that modified versions be marked as changed, so that their problems will not be attributed erroneously to authors of previous versions.</p>
+            <p>Some devices are designed to deny users access to install or run modified versions of the software inside them, although the manufacturer can do so. This is fundamentally incompatible with the aim of protecting users' freedom to change the software. The systematic pattern of such abuse occurs in the area of products for individuals to use, which is precisely where it is most unacceptable. Therefore, we have designed this version of the GPL to prohibit the practice for those products. If such problems arise in other domains, we stand ready to extend this provision to those domains in future versions of the GPL, as needed to protect the freedom of users.</p>
+            <p>Finally, every program is threatened constantly by software patents. States should not allow patents to restrict development and use of software on general-purpose computers, but in those that do, we wish to avoid the special danger that patents applied to a free program could make it effectively proprietary. To prevent this, the GPL ensures that a patent cannot be used to render the program non-free.</p>
+            <p>The precise terms and conditions for copying, distribution and modification follow.</p>
+
+            <h3>TERMS AND CONDITIONS</h3>
+
+            <h4>0. Definitions.</h4>
+            <p>"This License" refers to version 3 of the GNU General Public License.</p>
+            <p>"The Program" refers to any copyrightable work licensed under this License. Each licensee is addressed as "you". "Licensees" and "recipients" may be individuals or organizations.</p>
+            <p>To "modify" a work means to copy from or adapt all or part of the work in a fashion requiring copyright permission, other than the making of an exact copy. The resulting work is called a "modified version" of the earlier work or a work "based on" the earlier work.</p>
+            <p>A "covered work" means either the unmodified Program or a work based on the Program.</p>
+            <p>To "propagate" a work means to do anything with it that, without permission, would make you directly or secondarily liable for infringement under applicable copyright law, except executing it on a computer or modifying a private copy. Propagation includes copying, redistribution, reverse engineering, decompilation, and public display.</p>
+            <p>A "contributor" is an author of the Program or an entity who has authorized use of the Program under this License.</p>
+            <p>"Your legal rights" means the rights provided by copyright law or patent law, in this or other jurisdictions, that are granted to you to perform, disseminate or run the covered work.</p>
+            <p>"Convey" a work means any kind of propagation that enables other parties to make or receive copies. Mere interaction with a user through a computer network, with no transfer of a copy, is not conveying.</p>
+            <p>An interactive user interface displays "Appropriate Legal Notices" to the extent that it includes a convenient and prominently visible feature that (1) displays an appropriate copyright notice, and (2) tells the user that there is no warranty for the work (provided that the users are not otherwise provided a warranty by virtue of assuming warranty liabilities from third party providers), and (3) tells the users that the work is licensed under this License, and (4) gives operational instructions for viewing a copy of this License. If the interface presents a list of user commands or options, such as a menu, a prominent item in the list would qualify.</p>
+
+            <h4>1. Source Code.</h4>
+            <p>The "source code" for a work means the preferred form of the work for making modifications to it. "Object code" means any non-source form of a work.</p>
+            <p>A "Standard Interface" means an interface that either is an official standard defined by a recognized standards body, or, in the case of interfaces specified for a particular programming language, one that is widely used among developers working in that language.</p>
+            <p>The "System Libraries" of an executable work include anything, other than the work as a whole, that (a) is included in the normal form of packaging a Major Component, but which is not part of that Major Component, and (b) serves only to enable use of the work with that Major Component, or to implement a Standard Interface for which an implementation is available to the public in source code form. A "Major Component", in this context, means a major essential component (kernel, window system, and so on) of the specific operating system (if any) on which the executable work runs, or a compiler used to produce the work, or an object code interpreter used to run it.</p>
+            <p>The "Corresponding Source" for a work in object code form means all the source code needed to generate, install, and run the object code and to modify the work, including scripts to control those activities. However, it does not include the work's System Libraries, or general-purpose tools or generally available free programs which are used unmodified in performing those activities but which are not part of the work. For example, Corresponding Source includes interface definition files associated with source files, and the source code for shared libraries and dynamically linked subprograms that the work is specifically designed to require, such as by intimate data communication or control flow between those subprograms and other parts of the work.</p>
+            <p>The Corresponding Source need not include anything that users can regenerate automatically from other parts of the Corresponding Source.</p>
+            <p>The Corresponding Source for a work in source code form is that same work.</p>
+
+            <h4>2. Basic Permissions.</h4>
+            <p>All rights granted under this License are granted for the term of copyright on the Program, and are irrevocable provided the stated conditions are met. This License explicitly affirms your unlimited permission to run the unmodified Program. The output from running a covered work is covered by this License only if the output, given its content, constitutes a covered work. This License acknowledges your rights of fair use or other equivalent, as provided by copyright law.</p>
+            <p>You may make, run and propagate covered works that you do not convey, without any condition so long as your license otherwise remains in force. You may convey covered works to others for the sole purpose of having them make modifications exclusively for you, or provide you with facilities for running those works, provided that you comply with the terms of this License in conveying all material for which you do not control copyright. Those thus making or running the covered works for you must do so exclusively on your behalf, under your direction and control, on terms that prohibit them from making any copies of your copyrighted material outside their relationship with you.</p>
+            <p>Conveying under any other circumstances is permitted solely under the conditions stated below. Sublicensing is not allowed; section 10 makes it unnecessary.</p>
+
+            <h4>3. Protecting Users' Legal Rights From Anti-Circumvention Law.</h4>
+            <p>No covered work shall be deemed part of an effective technological measure under any applicable law fulfilling obligations under Article 11 of the WIPO copyright treaty adopted on 20 December 1996, or similar laws prohibiting or restricting circumvention of such measures.</p>
+            <p>When you convey a covered work, you waive any legal power to forbid circumvention of technological measures to the extent such circumvention is effected by exercising rights under this License with respect to the covered work, and you disclaim any intention to limit operation or modification of the work to the detriment of the work's users.</p>
+
+            <h4>4. Conveying Verbatim Copies.</h4>
+            <p>You may convey verbatim copies of the Program's source code as you receive it, in any medium, provided that you conspicuously and appropriately publish on each copy an appropriate copyright notice; keep intact all notices stating that this License and any non-permissive terms added in accord with section 7 apply to the code; keep intact all notices of the absence of any warranty; and give all recipients a copy of this License along with the Program.</p>
+            <p>You may charge any price or no price for each copy that you convey, and you may offer support or warranty protection for a fee.</p>
+
+            <h4>5. Conveying Modified Source Versions.</h4>
+            <p>You may convey a work based on the Program, or the modifications to produce it from the Program, in the form of source code under the terms of section 4, provided that you also meet all of these conditions:</p>
+            <p>a) The work must carry prominent notices stating that you modified it, and giving a relevant date.</p>
+            <p>b) The work must carry prominent notices stating that it is released under this License and any conditions added under section 7. This requirement modifies the requirement in section 4 to "keep intact all notices".</p>
+            <p>c) You must license the entire work, as a whole, under this License to anyone who comes into possession of a copy. This License will therefore apply, along with any applicable section 7 additional terms, to the whole of the work, and all its parts, regardless of how they are packaged. This License gives no permission to license the work in any other way, but it does not invalidate such permission if you have separately received it.</p>
+            <p>d) If the work has interactive user interfaces, each must display "Appropriate Legal Notices"; however, if the Program has interactive interfaces that do not display Appropriate Legal Notices, your work need not make them do so.</p>
+            <p>A compilation of a covered work with other separate and independent works, which are not by their nature extensions of the covered work, and which are not combined with it such as to form a larger program, in or on a volume of a storage or distribution medium, is called an "aggregate" if the compilation and its resulting copyright are not used to limit the access or legal rights of the compilation's users beyond what the individual works permit. Inclusion of a covered work in an aggregate does not cause this License to apply to the other parts of the aggregate.</p>
+
+            <h4>6. Conveying Non-Source Forms.</h4>
+            <p>You may convey a covered work in object code form under the terms of sections 4 and 5, provided that you also convey the Corresponding Source in one of the ways below:</p>
+            <p>a) Convey the object code in, or embodied in, a physical product (including a physical distribution medium), accompanied by the Corresponding Source fixed on a durable physical medium customarily used for software interchange.</p>
+            <p>b) Convey the object code in, or embodied in, a physical product (including a physical distribution medium), accompanied by a written offer, valid for at least three years and valid for as long as you offer spare parts or customer support for that product model, to give anyone who possesses the object code either (1) a copy of the Corresponding Source for all the software in the product that is covered by this License, on a durable physical medium customarily used for software interchange, for a price no more than your reasonable cost of physically performing this conveying of source, or (2) access to copy the Corresponding Source from a network server at no charge.</p>
+            <p>c) Convey individual copies of the object code with a copy of the written offer to provide the Corresponding Source. This alternative is allowed only occasionally and non-commercially, and only if you received the object code with such an offer, in accord with section 6b.</p>
+            <p>d) Convey the object code by offering access from a designated place (gratis or for a charge), and offer equivalent access to the Corresponding Source in the same way through the same place at no further charge. You need not require recipients to copy the Corresponding Source along with the object code. If the place is a network server, the Corresponding Source may be on a different server (operated by you or a third party) that supports equivalent copying facilities, provided you maintain clear directions next to the object code where to find the Corresponding Source. Regardless of what server hosts the Corresponding Source, you remain obligated to ensure that it is available for as long as needed to satisfy these requirements.</p>
+            <p>e) Convey the object code using peer-to-peer transmission, provided you inform other peers where the object code and Corresponding Source of the work are being offered to the general public at no charge under subsection 6d.</p>
+            <p>A separable portion of the object code, whose source code is excluded from the Corresponding Source as a System Library, need not be included in conveying the object code work.</p>
+            <p>A "User Product" is either (1) a "consumer product", which means any tangible personal property which is normally used for personal, family, or household purposes, or (2) anything designed or sold for incorporation into a dwelling. In determining whether a product is a consumer product, doubtful cases shall be resolved in favor of coverage. For a particular product received by a particular user, "normally used" refers to a typical or common use of that class of product, regardless of the status of the particular user or of the way in which the particular user actually uses, or expects or is expected to use, the product. A product is a consumer product if it has substantially new features, or new accessory uses, not previously available, unless the only way to achieve such features and uses is to modify a data file.</p>
+            <p>A "Installation Information" for a User Product means any methods, procedures, authorization keys, or other information required to install and execute modified versions of a covered work in that User Product from a modified version of its Corresponding Source. The information must suffice to ensure that the continued functioning of the modified object code is in no case prevented or interfered with solely because modification has been made.</p>
+            <p>If you convey an object code work under this section in, or with, the ability to install modified versions of the covered work in a User Product, and the User Product is in the possession of the user, you must convey the Installation Information. The requirement to provide Installation Information does not include a requirement to continue to provide support service, warranty, or updates for a work that has been modified or installed by the recipient, or for the User Product in which it has been modified or installed. Access to a network may be denied when the modification itself materially and adversely affects operation of the network or the protocol over which communication takes place.</p>
+            <p>Corresponding Source conveyed, and Installation Information provided, in accord with this section must be in a format that is publicly documented (and with an implementation available to the public in source code form), and must require no special password or key for unpacking, reading or copying.</p>
+
+            <h4>7. Additional Terms.</h4>
+            <p>"Additional permissions" are terms that supplement the terms of this License by making exceptions from one or more of its conditions. Additional permissions that are applicable to the entire Program shall be treated as though they were included in this License, to the extent that they are valid under applicable law. If additional permissions apply only to part of the Program, that part may be used separately under those permissions, but the entire Program remains governed by this License without regard to the additional permissions when held as a whole.</p>
+            <p>When you convey a copy of a covered work, you may at your option remove any additional permissions from that copy. (Additional permissions may be written to require their own removal in certain cases when you modify the work.) You may place additional permissions on material, added by you to a covered work, for which you have or can give appropriate copyright permission.</p>
+            <p>Notwithstanding any other provision of this License, for material you add to a covered work, you may (if authorized by the copyright holders of that material) supplement the terms of this License with terms:</p>
+            <p>a) Disclaiming warranty or limiting liability differently from the terms of sections 15 and 16 of this License; or</p>
+            <p>b) Requiring preservation of specified reasonable legal notices or author attributions in that material or in the Appropriate Legal Notices displayed by works containing it; or</p>
+            <p>c) Prohibiting misrepresentation of the origin of that material, or requiring that modified versions of such material be marked in reasonable ways as differing from the original version; or</p>
+            <p>d) Limiting the use for publicity purposes of names or trademarks; or</p>
+            <p>e) Declining to grant rights under trademark law for use of some trade names, trademarks, or service marks; or</p>
+            <p>f) Requiring indemnification of licensors and authors of that material by anyone who conveys the material (or modified versions of it) with contractual assumptions of liability to the recipient, for any liability that these contractual assumptions directly impose on those licensors and authors.</p>
+            <p>All other non-permissive additional terms are considered "further restrictions" within the meaning of section 10. If the Program as you received it, or any part of it, contains a notice stating that it is governed by this License along with a term that is a further restriction, you may remove that term. If a license document contains a further restriction but permits relicensing or conveying under this License, you may use that license document, or a combined version of it, to convey the Program, provided that you remove that further restriction.</p>
+
+            <h4>8. Termination.</h4>
+            <p>You may not propagate or modify a covered work except as expressly provided under this License. Any attempt otherwise to propagate or modify it is void, and will automatically terminate your rights under this License (including any patent licenses granted under the first paragraph of section 11).</p>
+            <p>However, if you cease all violation of this License, then your license from a particular copyright holder is reinstated (a) provisionally, unless and until the copyright holder explicitly and finally terminates your license, and (b) permanently, if the copyright holder fails to notify you of the violation by some reasonable means prior to 60 days after the cessation.</p>
+            <p>Moreover, your license from a particular copyright holder is reinstated permanently if the copyright holder notifies you of the violation by some reasonable means, this is the first time you have received notice of violation of this License (for any work) from that copyright holder, and you cure the violation prior to 30 days after your receipt of the notice.</p>
+            <p>Termination of your rights under this section does not terminate the licenses of parties who have received copies or rights from you under this License. If your rights have been terminated and not permanently reinstated, you do not have permission to run, display, perform, propagate, or modify the Program.</p>
+
+            <h4>9. Acceptance Not Required for Having Copies.</h4>
+            <p>You are not required to accept this License in order to receive or run a copy of the Program. Ancillary propagation of a covered work without acceptance likewise does not require acceptance. However, nothing other than this License grants you permission to propagate or modify any covered work. These actions infringe copyright if you do not accept this License. Therefore, by modifying or propagating a covered work, you indicate your acceptance of this License to do so.</p>
+
+            <h4>10. Automatic Licensing of Downstream Recipients.</h4>
+            <p>Each time you convey a covered work, the recipient automatically receives a license from the original licensors, to run, modify and propagate that work, subject to this License. You are not responsible for enforcing compliance by third parties with this License.</p>
+            <p>An "entity transaction" is a transaction transferring control of an organization, or substantially all assets of one, or subdividing an organization, or merging organizations. If propagation of a covered work results from an entity transaction, each party to that transaction who receives a copy of the work also receives whatever licenses to the work the party's predecessor in interest had or could give under the above paragraph, plus a right to possession of the Corresponding Source of the work from the predecessor in interest, if the predecessor has it or can get it with reasonable efforts.</p>
+            <p>You may not impose any further restrictions on the exercise of the rights granted or affirmed under this License. For example, you may not impose a license fee, royalty, or other charge for exercise of rights granted under this License, and you may not initiate litigation (including a cross-claim or counterclaim in a lawsuit) alleging that any patent claim is infringed by making, using, selling, offering for sale, or importing the Program or any portion of it.</p>
+
+            <h4>11. Patents.</h4>
+            <p>A "contributor" is a copyright holder who authorizes use under this License of the Program or a work on which the Program is based.</p>
+            <p>A contributor's "essential patent claims" are all patent claims owned or controlled by the contributor, whether already acquired or hereafter acquired, that would be infringed by some manner of making, using, or selling, offering for sale, or importing the Program in unmodified form. For the purposes of this definition, "control" includes the right to grant sublicenses of patent rights in a manner consistent with the requirements of this License.</p>
+            <p>Each contributor grants you a non-exclusive, worldwide, royalty-free patent license under the contributor's essential patent claims, to make, use, sell, offer for sale, import and otherwise run, modify and propagate the contents of the Program.</p>
+            <p>In the following three paragraphs, a "patent license" is any express agreement or commitment, however denominated, not to enforce a patent (such as an express permission to practice a patent or covenant not to sue for patent infringement). To "grant" such a patent license to a party means to make such an agreement or commitment not to enforce a patent against the party.</p>
+            <p>If you convey a covered work, knowingly relying on a patent license in connection with the Corresponding Source of the work, and the Corresponding Source is not available to anyone to copy free of charge under the terms of section 6, then you must arrange to either: (1) cause the Corresponding Source to be available free of charge under the terms of section 6, or (2) arrange to deprive yourself of the benefit of the patent license for this particular work, or (3) arrange in a manner consistent with the requirements of this License to extend the patent license to recipients of the Corresponding Source. "Knowingly relying" means you have actual knowledge that, but for the patent license, your conveying the covered work in a country, or your recipient's use of the covered work in a country, would infringe one or more identifiable patents in that country that you have reason to believe are valid.</p>
+            <p>If, pursuant to or in connection with a single transaction or arrangement, you convey, or propagate by procuring conveyance of, a covered work, and the procuring party also receives a patent license from some third party that is an organization in the business of distributing software, whose distributed product contains the covered work, then your conveying the covered work includes a patent license from you to the recipients for the Program's essential patent claims in the covered work, to the extent you control them.</p>
+            <p>A patent license is "discriminatory" if it does not include within its scope the activity for which freedom is granted under this License, is not granted on the formation of an entity, or does not permit the exercise of a patent right that would otherwise be infringed by the exercise of a right granted under this License.</p>
+            <p>You may not convey a covered work if you are a party to an arrangement with a third party that is in the business of distributing software, under which you make payment to the third party based on the extent of your conveying the work, and under which the third party grants, to any of the parties who would receive the covered work from you, a discriminatory patent license (a) in connection with copies of the covered work conveyed by you (or copies made from those copies), or (b) primarily for and in connection with specific products or compilations that contain the covered work, unless you entered into that arrangement, or that patent license was granted, prior to 28 March 2007.</p>
+            <p>Nothing in this License shall be construed as excluding or limiting any implied license or other defenses to infringement that may otherwise be available to you under applicable patent law.</p>
+
+            <h4>12. No Surrender of Others' Freedom.</h4>
+            <p>If conditions are imposed on you (whether by court order, agreement or otherwise) that contradict the conditions of this License, they do not excuse you from the conditions of this License. If you cannot convey a covered work so as to satisfy simultaneously your obligations under this License and any other pertinent obligations, then as a consequence you may not convey it at all. For example, if you agree to terms that obligate you to collect a royalty for onward conveying of the Program, and the only way you could satisfy that term is to forego all conveying of the Program, then you must forego conveying of the Program.</p>
+
+            <h4>13. Use with the GNU Affero General Public License.</h4>
+            <p>Notwithstanding any other provision of this License, you have permission to link or combine any covered work with a work licensed under version 3 of the GNU Affero General Public License into a single combined work, and to convey the resulting work. The terms of this License will continue to apply to the part which is the covered work, but the special requirements of the GNU Affero General Public License, section 13, concerning interaction through a network will apply to the combination as such.</p>
+
+            <h4>14. Revised Versions of this License.</h4>
+            <p>The Free Software Foundation may publish revised and/or new versions of the GNU General Public License from time to time. Such new versions will be similar in spirit to the present version, but may differ in detail to address new problems or concerns.</p>
+            <p>Each version is given a distinguishing version number. If the Program specifies that a certain numbered version of the GNU General Public License "or any later version" applies to it, you have the option of following the terms and conditions either of that numbered version or of any later version published by the Free Software Foundation. If the Program does not specify a version number of the GNU General Public License, you may choose any version ever published by the Free Software Foundation.</p>
+            <p>If the Program specifies that a proxy can decide which future versions of the GNU General Public License can be used, that proxy's public statement of acceptance of a version permanently authorizes you to choose that version for the Program.</p>
+            <p>Preamble: <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">https://www.gnu.org/licenses/gpl-3.0.html</a></p>
+            <p>How to Apply These Terms to Your New Programs: <a href="https://www.gnu.org/licenses/gpl-3.0.html#howto" target="_blank">https://www.gnu.org/licenses/gpl-3.0.html#howto</a></p>
+        </div>
     </div>
 
     <script>
@@ -166,6 +485,57 @@
                 navigator.clipboard.writeText(password).then(() => {
                     alert('Password copied to clipboard!');
                 });
+            }
+        }
+
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const body = document.body;
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme) {
+            body.classList.add(currentTheme);
+            if (currentTheme === 'dark-mode') {
+                themeToggleBtn.innerHTML = '&#127769;'; // Moon icon for dark mode
+            } else {
+                themeToggleBtn.innerHTML = '&#9728;'; // Sun icon for light mode
+            }
+        } else {
+            // Default to light mode if no preference is set
+            body.classList.add('light-mode');
+            themeToggleBtn.innerHTML = '&#9728;'; // Sun icon for light mode
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light-mode');
+                themeToggleBtn.innerHTML = '&#9728;'; // Sun icon for light mode
+            } else {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+                themeToggleBtn.innerHTML = '&#127769;'; // Moon icon for dark mode
+            }
+        });
+
+        // Info Modal Logic
+        const infoModal = document.getElementById('infoModal');
+        const infoBtn = document.getElementById('info-btn');
+        const closeButton = document.getElementsByClassName('close-button')[0];
+
+        infoBtn.onclick = function() {
+            infoModal.style.display = 'flex';
+        }
+
+        closeButton.onclick = function() {
+            infoModal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == infoModal) {
+                infoModal.style.display = 'none';
             }
         }
 
