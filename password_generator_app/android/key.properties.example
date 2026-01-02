@@ -1,0 +1,15 @@
+# Key Properties File for Android App Signing
+# Copy this file to key.properties and fill in your keystore details
+
+# Path to your keystore file (relative to android/ folder or absolute path)
+storeFile=/path/to/your/keystore.jks
+
+# Keystore password
+storePassword=your_keystore_password
+
+# Key alias name
+keyAlias=your_key_alias
+
+# Key password (usually same as storePassword)
+keyPassword=your_key_password
+
