@@ -4,7 +4,7 @@
 # This script will build both APK and AAB files
 
 echo "🔨 Building Cipher Generator - APK and AAB"
-echo "==========================================="
+ech "==========================================="
 echo ""
 
 # Navigate to app directory
