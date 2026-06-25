@@ -4,11 +4,11 @@
 # This script will build both APK and AAB files
 
 echo "🔨 Building Cipher Generator - APK and AAB"
-ech "==========================================="
+echo "==========================================="
 echo ""
 
 # Navigate to app directory
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit
 
 # Check Flutter
 if ! command -v flutter &> /dev/null; then
@@ -23,8 +23,7 @@ echo ""
 
 # Install dependencies
 echo "📥 Installing dependencies..."
-flutter pub get
-if [ $? -ne 0 ]; then
+if ! flutter pub get; then
     echo "❌ Failed to install dependencies"
     exit 1
 fi
@@ -37,13 +36,12 @@ echo ""
 
 # Build APK
 echo "🔨 Building APK (this may take a few minutes)..."
-flutter build apk --release
-if [ $? -eq 0 ]; then
+if flutter build apk --release; then
     echo ""
     echo "✅ APK build successful!"
     echo "📦 APK Location:"
     echo "   $(pwd)/build/app/outputs/flutter-apk/app-release.apk"
-    APK_SIZE=$(ls -lh build/app/outputs/flutter-apk/app-release.apk 2>/dev/null | awk '{print $5}')
+    APK_SIZE=$(du -h build/app/outputs/flutter-apk/app-release.apk 2>/dev/null | awk '{print $1}')
     echo "   Size: $APK_SIZE"
     echo ""
 else
@@ -53,13 +51,12 @@ fi
 
 # Build AAB
 echo "🔨 Building AAB (Android App Bundle) for Play Store..."
-flutter build appbundle --release
-if [ $? -eq 0 ]; then
+if flutter build appbundle --release; then
     echo ""
     echo "✅ AAB build successful!"
     echo "📦 AAB Location:"
     echo "   $(pwd)/build/app/outputs/bundle/release/app-release.aab"
-    AAB_SIZE=$(ls -lh build/app/outputs/bundle/release/app-release.aab 2>/dev/null | awk '{print $5}')
+    AAB_SIZE=$(du -h build/app/outputs/bundle/release/app-release.aab 2>/dev/null | awk '{print $1}')
     echo "   Size: $AAB_SIZE"
     echo ""
 else

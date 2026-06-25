@@ -10,7 +10,7 @@ void main() {
 }
 
 class ThemeNotifier extends ValueNotifier<ThemeMode> {
-  ThemeNotifier(ThemeMode value) : super(value);
+  ThemeNotifier(super.value);
 
   void toggleTheme() {
     value = value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
@@ -20,6 +20,8 @@ class ThemeNotifier extends ValueNotifier<ThemeMode> {
 final themeNotifier = ThemeNotifier(ThemeMode.system);
 
 class PasswordGeneratorApp extends StatelessWidget {
+  const PasswordGeneratorApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
@@ -31,9 +33,9 @@ class PasswordGeneratorApp extends StatelessWidget {
             primarySwatch: Colors.deepPurple,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             brightness: Brightness.light,
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Colors.deepPurple,
-              secondary: const Color(0xFFFF6B6B),
+              secondary: Color(0xFFFF6B6B),
               surface: Colors.white,
               onSurface: Colors.black87,
             ),
@@ -42,10 +44,10 @@ class PasswordGeneratorApp extends StatelessWidget {
             primarySwatch: Colors.deepPurple,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             brightness: Brightness.dark,
-            colorScheme: ColorScheme.dark(
+            colorScheme: const ColorScheme.dark(
               primary: Colors.deepPurple,
-              secondary: const Color(0xFFFF6B6B),
-              surface: const Color(0xFF121212),
+              secondary: Color(0xFFFF6B6B),
+              surface: Color(0xFF121212),
               onSurface: Colors.white,
             ),
           ),
@@ -66,6 +68,8 @@ enum PasswordStrength {
 }
 
 class PasswordGeneratorHomePage extends StatefulWidget {
+  const PasswordGeneratorHomePage({super.key});
+
   @override
   _PasswordGeneratorHomePageState createState() => _PasswordGeneratorHomePageState();
 }
@@ -205,9 +209,9 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
 
     List<String> password = [];
     // Ensure at least one character from each selected set
-    charSets.forEach((set) {
+    for (var set in charSets) {
       password.add(set[random.nextInt(set.length)]);
-    });
+    }
 
     // Fill the rest of the password
     final allChars = charSets.join();
@@ -229,9 +233,9 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
     if (password.isNotEmpty && password != 'Select at least one character type.') {
       Clipboard.setData(ClipboardData(text: password));
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Password copied to clipboard!'),
-          duration: const Duration(seconds: 2),
+        const SnackBar(
+          content: Text('Password copied to clipboard!'),
+          duration: Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -262,15 +266,15 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(isDark ? 0.5 : 0.1),
+                        color: Colors.black.withValues(alpha: isDark ? 0.5 : 0.1),
                         blurRadius: 35,
                         offset: const Offset(0, 15),
                       ),
                     ],
                     border: Border.all(
                       color: isDark 
-                          ? Colors.white.withOpacity(0.1)
-                          : Colors.black.withOpacity(0.1),
+                          ? Colors.white.withValues(alpha: 0.1)
+                          : Colors.black.withValues(alpha: 0.1),
                       width: 1,
                     ),
                   ),
@@ -297,7 +301,7 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
                               : const Color.fromRGBO(240, 240, 250, 0.8),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: strengthColor.withOpacity(0.5),
+                            color: strengthColor.withValues(alpha: 0.5),
                             width: 2,
                           ),
                         ),
@@ -355,8 +359,8 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
                                   child: LinearProgressIndicator(
                                     value: _getStrengthValue(strength),
                                     backgroundColor: isDark 
-                                        ? Colors.white.withOpacity(0.1)
-                                        : Colors.black.withOpacity(0.1),
+                                        ? Colors.white.withValues(alpha: 0.1)
+                                        : Colors.black.withValues(alpha: 0.1),
                                     valueColor: AlwaysStoppedAnimation<Color>(strengthColor),
                                     minHeight: 6,
                                   ),
@@ -391,8 +395,8 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
                             },
                             activeColor: const Color(0xFFFF6B6B),
                             inactiveColor: isDark 
-                                ? Colors.white.withOpacity(0.3)
-                                : Colors.black.withOpacity(0.3),
+                                ? Colors.white.withValues(alpha: 0.3)
+                                : Colors.black.withValues(alpha: 0.3),
                           ),
                         ],
                       ),
@@ -448,7 +452,7 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
                       // Password History Section
                       if (_passwordHistory.isNotEmpty) ...[
                         Divider(
-                          color: isDark ? Colors.white.withOpacity(0.2) : Colors.black.withOpacity(0.2),
+                          color: isDark ? Colors.white.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.2),
                         ),
                         const SizedBox(height: 10),
                         Row(
@@ -469,9 +473,9 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
                                 });
                                 _savePasswordHistory();
                               },
-                              child: Text(
+                              child: const Text(
                                 'Clear',
-                                style: TextStyle(color: const Color(0xFFFF6B6B)),
+                                style: TextStyle(color: Color(0xFFFF6B6B)),
                               ),
                             ),
                           ],
@@ -489,7 +493,7 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
                                   : const Color.fromRGBO(240, 240, 250, 0.6),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                color: pwdColor.withOpacity(0.3),
+                                color: pwdColor.withValues(alpha: 0.3),
                                 width: 1,
                               ),
                             ),
@@ -516,7 +520,7 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
                               ],
                             ),
                           );
-                        }).toList(),
+                        }),
                       ],
                     ],
                   ),
@@ -586,7 +590,7 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color(0xFFFF6B6B),
+            activeThumbColor: const Color(0xFFFF6B6B),
           ),
         ],
       ),
@@ -604,15 +608,15 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.3 : 0.1),
+            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
         ],
         border: Border.all(
           color: isDark 
-              ? Colors.white.withOpacity(0.1)
-              : Colors.black.withOpacity(0.1),
+              ? Colors.white.withValues(alpha: 0.1)
+              : Colors.black.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -645,8 +649,8 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: isDark
-                    ? Colors.white.withOpacity(0.2)
-                    : Colors.black.withOpacity(0.2),
+                    ? Colors.white.withValues(alpha: 0.2)
+                    : Colors.black.withValues(alpha: 0.2),
                 width: 1,
               ),
             ),
@@ -705,7 +709,7 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
                             );
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           'GitHub Profile: https://github.com/ItIsCiprian',
                           style: TextStyle(
                             fontSize: 16,
@@ -790,7 +794,7 @@ class _PasswordGeneratorHomePageState extends State<PasswordGeneratorHomePage> {
 }
 
 class LicensePage extends StatelessWidget {
-  const LicensePage({Key? key}) : super(key: key);
+  const LicensePage({super.key});
 
   Future<String> _loadLicense() async {
     return await rootBundle.loadString('LICENSE');

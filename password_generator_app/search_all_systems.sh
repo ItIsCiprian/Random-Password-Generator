@@ -88,7 +88,7 @@ echo ""
 
 for i in "${!FOUND_FILES[@]}"; do
     FILE="${FOUND_FILES[$i]}"
-    SIZE=$(ls -lh "$FILE" 2>/dev/null | awk '{print $5}')
+    SIZE=$(du -h "$FILE" 2>/dev/null | awk '{print $1}')
     echo "  [$((i+1))] $FILE ($SIZE)"
 done
 

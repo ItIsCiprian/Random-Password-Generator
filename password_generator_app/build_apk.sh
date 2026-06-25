@@ -27,7 +27,7 @@ if ! command -v flutter &> /dev/null; then
 fi
 
 # Navigate to app directory
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit
 
 echo "📁 Current directory: $(pwd)"
 echo ""
@@ -39,8 +39,7 @@ echo ""
 
 # Install dependencies
 echo "📥 Installing dependencies..."
-$FLUTTER_CMD pub get
-if [ $? -ne 0 ]; then
+if ! $FLUTTER_CMD pub get; then
     echo "❌ Failed to install dependencies"
     exit 1
 fi
@@ -53,8 +52,7 @@ echo ""
 
 # Build APK
 echo "🔨 Building APK (this may take a few minutes)..."
-$FLUTTER_CMD build apk --release
-if [ $? -eq 0 ]; then
+if $FLUTTER_CMD build apk --release; then
     echo ""
     echo "✅ Build successful!"
     echo ""
@@ -67,7 +65,8 @@ if [ $? -eq 0 ]; then
     echo "   3. Open the APK file and install"
     echo ""
     echo "💡 File size:"
-    ls -lh build/app/outputs/flutter-apk/app-release.apk 2>/dev/null || echo "   (check the build folder)"
+    APK_SIZE=$(du -h build/app/outputs/flutter-apk/app-release.apk 2>/dev/null | awk '{print $1}')
+    echo "    Size: $APK_SIZE"
     echo ""
 else
     echo ""

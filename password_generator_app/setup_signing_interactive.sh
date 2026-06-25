@@ -43,7 +43,7 @@ if [ -z "$KEYSTORES" ]; then
     echo "  - ~/Downloads/"
     echo "  - Backup folders"
     echo ""
-    read -p "Enter the full path to your keystore file (or press Enter to skip): " KEYSTORE_PATH
+    read -rp "Enter the full path to your keystore file (or press Enter to skip): " KEYSTORE_PATH
     
     if [ -z "$KEYSTORE_PATH" ]; then
         echo ""
@@ -67,7 +67,7 @@ else
     read -p "Select keystore (1-${#KEYSTORE_ARRAY[@]}, or 0): " SELECTION
     
     if [ "$SELECTION" = "0" ] || [ -z "$SELECTION" ]; then
-        read -p "Enter the full path to your keystore file: " KEYSTORE_PATH
+        read -rp "Enter the full path to your keystore file: " KEYSTORE_PATH
     else
         KEYSTORE_PATH="${KEYSTORE_ARRAY[$((SELECTION-1))]}"
     fi
@@ -89,7 +89,7 @@ ALIASES=$(keytool -list -keystore "$KEYSTORE_PATH" 2>/dev/null | grep -i "alias"
 
 if [ -z "$ALIASES" ]; then
     echo "⚠️  Could not read keystore. You'll need to enter the alias manually."
-    read -p "Enter key alias (common: upload, key, release): " KEY_ALIAS
+    read -rp "Enter key alias (common: upload, key, release): " KEY_ALIAS
 else
     echo "Found aliases:"
     IFS=$'\n'
@@ -98,7 +98,7 @@ else
         echo "  [$((i+1))] ${ALIAS_ARRAY[$i]}"
     done
     echo ""
-    read -p "Select alias (1-${#ALIAS_ARRAY[@]}): " ALIAS_SELECTION
+    read -rp "Select alias (1-${#ALIAS_ARRAY[@]}): " ALIAS_SELECTION
     KEY_ALIAS="${ALIAS_ARRAY[$((ALIAS_SELECTION-1))]}"
 fi
 
@@ -179,11 +179,9 @@ echo "--------------------"
 echo "Rebuilding AAB with correct signing key..."
 echo ""
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit
 flutter clean > /dev/null 2>&1
-flutter build appbundle --release
-
-if [ $? -eq 0 ]; then
+if flutter build appbundle --release; then
     echo ""
     echo "✅ Build successful!"
     echo ""
