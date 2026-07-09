@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 void main() {
-  runApp(PasswordGeneratorApp());
+  runApp(const PasswordGeneratorApp());
 }
 
 class ThemeNotifier extends ValueNotifier<ThemeMode> {
@@ -52,7 +52,7 @@ class PasswordGeneratorApp extends StatelessWidget {
             ),
           ),
           themeMode: mode,
-          home: PasswordGeneratorHomePage(),
+          home: const PasswordGeneratorHomePage(),
         );
       },
     );
