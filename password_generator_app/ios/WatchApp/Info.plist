@@ -20,14 +20,40 @@
     <string>1.0.4</string>
     <key>CFBundleVersion</key>
     <string>9</string>
+    <key>CLKComplicationPrincipalClass</key>
+    <string>$(SWIFT_MODULE_NAME).ComplicationController</string>
+    <key>CLKComplicationSupportedFamilies</key>
+    <array>
+        <string>CLKComplicationFamilyModularSmall</string>
+        <string>CLKComplicationFamilyModularLarge</string>
+        <string>CLKComplicationFamilyUtilitarianSmall</string>
+        <string>CLKComplicationFamilyUtilitarianSmallFlat</string>
+        <string>CLKComplicationFamilyUtilitarianLarge</string>
+        <string>CLKComplicationFamilyCircularSmall</string>
+        <string>CLKComplicationFamilyExtraLarge</string>
+        <string>CLKComplicationFamilyGraphicCorner</string>
+        <string>CLKComplicationFamilyGraphicBezel</string>
+        <string>CLKComplicationFamilyGraphicCircular</string>
+        <string>CLKComplicationFamilyGraphicRectangular</string>
+        <string>CLKComplicationFamilyGraphicExtraLarge</string>
+    </array>
+    <key>WKApplication</key>
+    <true/>
+    <key>WKCompanionAppBundleIdentifier</key>
+    <string>com.example.passwordGeneratorApp</string>
     <key>UISupportedInterfaceOrientations</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>
         <string>UIInterfaceOrientationPortraitUpsideDown</string>
     </array>
-    <key>WKCompanionAppBundleIdentifier</key>
-    <string>com.example.passwordGeneratorApp</string>
-    <key>WKWatchKitApp</key>
-    <true/>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>watch-processing</string>
+    </array>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
 </dict>
 </plist>
