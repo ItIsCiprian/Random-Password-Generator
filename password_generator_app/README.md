@@ -83,6 +83,30 @@ Use the provided script:
 
 Or see `BUILD_AAB.md` for detailed instructions.
 
+### iOS + Apple Watch (Simulator)
+
+The app ships with a watchOS companion ("Cipher Generator" for Apple Watch) in
+`ios/WatchApp`. To build it and install it on the booted iPhone and its paired
+Apple Watch simulators:
+
+```bash
+./build_ios_watch.sh
+```
+
+Optional flags:
+- `--phone <UDID>` / `--watch <UDID>` — pick specific simulators
+- `--no-launch` — install without launching
+
+Requirements:
+- Xcode (the script locates it at `/Applications/Xcode.app/Contents/Developer`)
+- A booted iPhone simulator (auto-detected)
+- A booted Apple Watch simulator paired with that iPhone (auto-detected)
+
+From Xcode, select the **Runner** scheme + iPhone destination and Run; the watch
+app is embedded in the iOS app and installs on the paired watch. Alternatively
+select the **WatchApp** scheme and an Apple Watch destination to run the watch
+app standalone.
+
 ## 📱 App Details
 
 - **App Name:** Cipher Generator
